@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<project name="name-of-project" default="build" basedir=".">
+<project name="mitre-logger" default="build" basedir=".">
+  <taskdef name="sftp" classname="${project.basedir}/src/application/SftpTask" />
+  <target name="sftp" description="Run tools in parallel">
+  <sftp username="john" password="secret" host="example.com" todir="/public_html" file="index.html" />
+  <sftp username="john" password="secret" host="example.com" todir="/public_html/app">
+    <fileset dir="template">
+      <include name="*.html" />
+    </fileset>
+  </sftp>
+  </target>
+
  <target name="build"
    depends="prepare,lint,phploc,pdepend,phpmd-ci,phpcs-ci,phpcpd,phpdox,phpunit,phpcb"/>
 
@@ -19,7 +29,6 @@
    <antcall target="phpdox"/>
   </parallel>
  </target>
-
 
  <target name="phploc" description="Measure project size using PHPLOC">
    <exec executable="${project.basedir}/vendor/bin/phploc" logoutput="true">
