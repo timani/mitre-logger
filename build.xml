@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <project name="mitre-logger" default="build" basedir=".">
-  <taskdef name="sftp" classname="${project.basedir}/src/application/SftpTask" />
+  <taskdef name="sftp" classname="${project.basedir}.src.application.SftpTask" />
   <target name="sftp" description="Run tools in parallel">
   <sftp username="john" password="secret" host="example.com" todir="/public_html" file="index.html" />
   <sftp username="john" password="secret" host="example.com" todir="/public_html/app">
