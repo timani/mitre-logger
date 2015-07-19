@@ -99,6 +99,39 @@ On every machine you install asciinema recorder, you get a new, unique API token
 
 [![demo](http://www.scielo.br/img/revistas/jistm/v8n1/a05fig02.jpg)] 
 
+## Configuration
+
+On every machine you install asciinema recorder, you get a new, unique API token. This command connects this local token with your asciinema.org account, and links all asciicasts recorded on this machine with the account.
+
+#### Logger Properties
+
+The last line of the example expresses an expected outcome.
+
+```xml 
+  <property name="logger.uuid" value="9f605e3b-aa07-4302-8683-8dbbff6dd33f" />
+  <property name="logger.env" value="dev" />
+  <property name="logger.threads" value="2" />
+  <property name="logger.reports.dir" value="${project.basedir}/build/reports"/>
+```
+
+#### Drush Properties
+
+Those PRs are fast-forwarded whenever it's possible and cherry-picked otherwise (most likely they will be cherry-picked).
+
+```xml 
+  <property name="drush.target" value="@monolog-new-relic-d7.dev" />
+  <property name="drush.bin"  value="${project.basedir}/vendor/bin/drush" />
+```
+#### Misc Properties
+
+You'll need to include the dependent RSpec repos as well. 
+
+```xml 
+  <property name="dash.url" value="https://admin.dashboard.pantheon.io" />
+  <property name="reports.dir" value="${project.basedir}/build/reports" />
+  <property name="goaccess.config" value="${project.basedir}/config/.goaccess" />
+```
+
 ## Usage
 
 Run the install list command to see a list of available targets
