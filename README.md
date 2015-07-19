@@ -166,7 +166,26 @@ Main targets:
 ## Support
 
 Please [open an issue](https://github.com/fraction/readme-boilerplate/issues/new) for support.
+## Documentation
+
+Take a look at the [documentation table of contents](dist/doc/TOC.md).
+This documentation is bundled with the project, which makes it readily
+available for offline reading and provides a useful starting point for
+any documentation you want to write about your project.
+
 
 ## Contributing
 
-Please contribute using [Github Flow](https://guides.github.com/introduction/flow/). Create a branch, add commits, and [open a pull request](https://github.com/fraction/readme-boilerplate/compare/).
+Hundreds of developers have helped make the HTML5 Boilerplate what it is
+today. Anyone and everyone is welcome to [contribute](CONTRIBUTING.md),
+however, if you decide to get involved, please take a moment to review
+the [guidelines](CONTRIBUTING.md):
+
+* [Bug reports](CONTRIBUTING.md#bugs)
+* [Feature requests](CONTRIBUTING.md#features)
+* [Pull requests](CONTRIBUTING.md#pull-requests)
+
+
+## License
+
+The code is available under the [MIT license](LICENSE.txt).
