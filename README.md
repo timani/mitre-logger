@@ -37,6 +37,17 @@ This role requires Ansible 1.4 or higher and tested platforms are listed in the 
     - [Emacs version](#emacs-version)
     - [OS X](#os-x)
 
+## Features
+
+* HTML5 ready. Use the new elements with confidence.
+* Designed with progressive enhancement in mind.
+* Includes:
+  * [`Normalize.css`](https://necolas.github.com/normalize.css/)
+    for CSS normalizations and common bug fixes
+  * [`jQuery`](https://jquery.com/) via CDN, with a local fallback
+  * A custom build of  [`Modernizr`](http://modernizr.com/) for feature
+    detection
+
 ## Install
 
 Want to run against the `master` branch? You'll need to include the dependent
