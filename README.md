@@ -48,6 +48,36 @@ Install the dependencies with Composer
 ```
 php composer.phar install
 ```
+### Install with Docker
+ 
+Start your image binding the external ports 8000 in all interfaces to your container:
+
+```
+ docker run -t -i -p 8000:8000 sculpin /bin/bash
+```
+### Install with docker-compose
+ 
+Start your image binding the external ports 8000 in all interfaces to your container:
+
+```yml
+app:
+   image: php
+   links:
+     - jenkins
+  volume:
+    - "./:/var/jenkins_home"
+```
+
+Start the mite-logger container
+```
+ docker-compose up -d
+```
+
+Verify the container is running
+``` 
+docker-compose ps
+```
+
 
 ## Overview
 
