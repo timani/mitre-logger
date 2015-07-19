@@ -8,11 +8,19 @@ Requirements
 
 This role requires Ansible 1.4 or higher and tested platforms are listed in the metadata file.  
 
-
- - **drush**: The list a pools for php-fpm, each pools is a hash with
+ - **sftp**: The list a pools for php-fpm, each pools is a hash with
+   a name entry (used for filename), all the other entries in the hash are pool
+   directives (see http://php.net/manual/en/install.fpm.configuration.php).
+ - **goaccess**: The list a pools for php-fpm, each pools is a hash with
    a name entry (used for filename), all the other entries in the hash are pool
    directives (see http://php.net/manual/en/install.fpm.configuration.php).
  - **percona-toolkit**: The list a pools for php-fpm, each pools is a hash with
+   a name entry (used for filename), all the other entries in the hash are pool
+   directives (see http://php.net/manual/en/install.fpm.configuration.php).
+ - **docker** _(optional)_: The list a pools for php-fpm, each pools is a hash with
+   a name entry (used for filename), all the other entries in the hash are pool
+   directives (see http://php.net/manual/en/install.fpm.configuration.php).
+ - **docker-compose** _(optional)_: The list a pools for php-fpm, each pools is a hash with
    a name entry (used for filename), all the other entries in the hash are pool
    directives (see http://php.net/manual/en/install.fpm.configuration.php).
 
