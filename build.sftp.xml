@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="mitre-sftp" default="sftp.show" basedir=".">
+
+  <!-- ## Targets -->
+
+  <target name="sftp.app" description="Collect the latest logs from the application containers">
+      <echo msg=" " />
+      <echo msg="Collect the latest logs for ${logger.env} application containers" />
+      <echo msg=" " />
+      <mkdir dir="${project.basedir}/build/logs/appserver"/>
+      <exec command="sftp -o Port=2222 ${logger.env}.${logger.uuid}@appserver.${logger.env}.${logger.uuid}.drush.in:logs/*.log build/logs/appserver" logoutput="true"/>
+      <echo msg=" " />
+      <echo msg="File transfer complete." />
+      <echo msg=" " />
+  </target>
+
+  <target name="sftp.db"
+    description="Collect the latest logs from the database containers">
+      <echo msg=" " />
+      <echo msg="Collect the latest logs for ${logger.env} database containers" />
+      <echo msg=" " />
+      <mkdir dir="${project.basedir}/build/logs/db"/>
+      <exec command="sftp -o Port=2222 ${logger.env}.${logger.uuid}@dbserver.${logger.env}.${logger.uuid}.drush.in:logs/*.log build/logs/db" logoutput="true"/>
+      <echo msg=" " />
+      <echo msg="File transfer complete." />
+      <echo msg=" " />
+  </target>
+
+    <target name="sftp.redis"
+      description="Collect the latest logs from the redis containers">
+      <echo msg=" " />
+      <echo msg="Collect the latest logs from the redis containers" />
+      <echo msg=" " />
+    <exec command="sftp -o Port=2222 ${logger.env}.${logger.uuid}@redisserver.${logger.env}.${logger.uuid}.drush.in:logs/*.log build/logs/redis" logoutput="true"
+        passthru="true"
+        checkreturn="true" />
+    </target>
+
+</project>

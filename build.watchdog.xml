@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="mitre-watchdog" default="wd.show" basedir=".">
+
+  <!-- ## Targets -->
+
+  <target name="wd.show" description="Show the latest watchdog errors">
+    <!--<watchdog save="false" count="100" type="" /> -->
+    <echo msg=" " />
+    <echo msg="Show the latest ${drush.ws.count} watchdog errors" />
+    <echo msg=" " />
+    <exec command="${drush.bin} ${drush.target} ws ${drush.strict} ${drush.ws.count}"
+          passthru="true"
+          checkreturn="true">
+    </exec>
+  </target>
+
+    <target name="wd.clear"
+            description="Clear the watchdog table of all entries">
+            <echo msg=" " />
+            <echo msg="Clear the watchdog table of all entries" />
+            <echo msg=" " />
+      <exec command="${drush.bin} ${drush.target} wd-del all -y"
+            passthru="true"
+            checkreturn="true" />
+    </target>
+</project>

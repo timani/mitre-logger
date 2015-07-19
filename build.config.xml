@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="mitre-base" default="base.build">
+
+  <!-- ## Defual Targets for project setup -->
+
+   <target name="base.build" description="Base build to clean and install the logger"
+     depends="base.clean,base.install"/>
+
+   <target name="base.clean" description="Clean the cache and artificats">
+     <exec executable="${project.basedir}/vendor/bin/phploc" logoutput="true">
+     </exec>
+   </target>
+
+   <target name="base.install" description="Install dependencies and create directories">
+   	<mkdir dir="./build" />
+   </target>
+
+  </project>

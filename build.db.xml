@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="mitre-db" default="db.processlist" basedir=".">
+
+  <!-- ## Targets -->
+  <target name="db.processlist"
+          description="Show the full MySQL processlist.">
+          <echo msg=" " />
+          <echo msg="Show the full MySQL processlist" />
+          <echo msg=" " />
+    <exec command="${drush.bin} ${drush.target} sqlq 'show full processlist \G' ${drush.strict} "
+          passthru="true"
+          checkreturn="true" />
+  </target>
+
+  <target name="db.status"
+          description="Show InnoDB engine status">
+          <echo msg=" " />
+          <echo msg="Show the InnoDB engine status" />
+          <echo msg=" " />
+    <exec command="${drush.bin} ${drush.target} sqlq 'show engine innodb status \G' ${drush.strict}"
+          passthru="true"
+          checkreturn="true" />
+  </target>
+
+    <target name="db.pt-query-digest"
+            description="Analyze MySQL slow logs with the pt-query-digest">
+            <echo msg=" " />
+            <echo msg="Analyze MySQL slow logs with the pt-query-digest." />
+            <echo msg=" " />
+      <exec command="pt-query-digest ${db.slow-log}"
+            passthru="true"
+            checkreturn="true" />
+    </target>
+
+  <target name="db.kill-queries"
+          description="Kill long running queries @TODO">
+          <echo msg=" " />
+          <echo msg="Kill long running queries" />
+          <echo msg=" " />
+    <exec command="${drush.bin} ${drush.target} sqlq 'explain ${qid}' ${drush.strict} "
+          passthru="true"
+          checkreturn="true" />
+  </target>
+
+</project>

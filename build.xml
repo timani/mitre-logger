@@ -1,154 +1,94 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<project name="mitre-logger" default="build" basedir=".">
-  <taskdef name="sftp" classname="${project.basedir}.src.application.SftpTask" />
-  <target name="sftp" description="Run tools in parallel">
-  <sftp username="john" password="secret" host="example.com" todir="/public_html" file="index.html" />
-  <sftp username="john" password="secret" host="example.com" todir="/public_html/app">
-    <fileset dir="template">
-      <include name="*.html" />
-    </fileset>
-  </sftp>
+<project name="mitre-main" default="logger.collect-logs" basedir=".">
+
+  <!-- ## Project Properties -->
+  <property name="logger.uuid" value="9f605e3b-aa07-4302-8683-8dbbff6dd33f" />
+  <property name="logger.env" value="dev" />
+  <property name="logger.threads" value="2" />
+  <property name="logger.reports.dir" value="${project.basedir}/build/reports"/>
+
+  <!-- ## Database Properties -->
+  <property name="db.slow-log" value="${project.basedir}/build/logs/db/mysqld-slow-query.log" />
+
+  <!-- ## Redis Properties -->
+  <property name="redis.host" value="xxxxxxx" />
+  <property name="redis.port"  value="xxxxx" />
+  <property name="redis.password"  value="4b002595efb24d8093a86e67f5cc6e7e" />
+
+  <!-- ## Drush Properties -->
+  <property name="drush.target" value="@monolog-new-relic-d7.dev" />
+  <property name="drush.bin"  value="${project.basedir}/vendor/bin/drush" />
+  <property name="drush.alias"  value="--alias='.'" />
+  <property name="drush.strict" value="--strict='0'" />
+  <property name="drush.ws.count" value="--count=100" />
+  <property name="drush.dump.dir" value="/tmp" />
+
+  <!-- ## General Properties -->
+  <property name="dash.url" value="https://admin.dashboard.pantheon.io" />
+  <property name="reports.dir" value="${project.basedir}/build/reports" />
+  <property name="goaccess.config" value="${project.basedir}/config/.goaccess" />
+
+  <!-- ## Import build files -->
+  <import file="${project.basedir}/build.config.xml"/>
+  <import file="${project.basedir}/build.db.xml"/>
+  <import file="${project.basedir}/build.sftp.xml"/>
+  <import file="${project.basedir}/build.watchdog.xml"/>
+
+  <!-- ## Custom Task definitions -->
+  <taskdef name="lookup" classname="${project.basedir}.src.application.LookupTask" description="A task for container lookups"/>
+
+  <!-- ## Targets -->
+  <target name="logger.collect-logs"
+    description="Collect all the service and server logs for a site">
+    <parallel threadCount="${logger.threads}">
+      <phingcall target="logger.app" />
+      <phingcall target="logger.db" />
+      <phingcall target="logger.redis" />
+    </parallel>
+    <phingcall target="logger.logs" />
   </target>
 
- <target name="build"
-   depends="prepare,lint,phploc,pdepend,phpmd-ci,phpcs-ci,phpcpd,phpdox,phpunit,phpcb"/>
+  <target name="logger.analyze"
+    description="Analyze and generate a report for the build" >
+    <echo msg=""/>
+    <echo msg="Running analysis on nginx access logs..." />
+    <exec
+      command="goaccess -p ${goaccess.config} -f build/logs/appserver/nginx-access.log -a > ${reports.dir}/report.html"
+      logoutput="true"/>
+      <echo msg="" />
+      <echo msg="Generating MySQL slow log report..." />
+      <phingcall target="db.pt-query-digest" />
+      <echo msg="" />
+      <echo msg="Formatting report..." />
+    </target>
 
- <target name="build-parallel"
-   depends="prepare,lint,tools-parallel,phpunit,phpcb"/>
+    <target name="logger.app"
+      description="Aggregate the logs from the application containers" >
+      <phingcall target="wd.show" />
+    </target>
 
- <target name="tools-parallel" description="Run tools in parallel">
-  <parallel threadCount="2">
-   <sequential>
-    <antcall target="pdepend"/>
-    <antcall target="phpmd-ci"/>
-   </sequential>
-   <antcall target="phpcpd"/>
-   <antcall target="phpcs-ci"/>
-   <antcall target="phploc"/>
-   <antcall target="phpdox"/>
-  </parallel>
- </target>
+    <target name="logger.db"
+      description="Aggregate the logs from the database containers" >
+      <phingcall target="db.processlist" />
+      <phingcall target="db.status" />
+    </target>
 
- <target name="phploc" description="Measure project size using PHPLOC">
-   <exec executable="${project.basedir}/vendor/bin/phploc" logoutput="true">
-     <arg value="--log-csv" />
-     <arg value="${project.basedir}/build/logs/phploc.csv" />
-     <arg path="${project.basedir}/src" />
-   </exec>
- </target>
+    <target name="logger.redis"
+      description="Aggregate the logs from the redis containers" >
+      <echo msg="Redis CLI info." />
+      <exec command="redis-cli -h ${redis.host} -p ${redis.port} -a ${redis.password} info" logoutput="true"/>
+    </target>
 
- <target name="clean" description="Cleanup build artifacts">
-  <delete dir="${project.basedir}/build/api"/>
-  <delete dir="${project.basedir}/build/code-browser"/>
-  <delete dir="${project.basedir}/build/coverage"/>
-  <delete dir="${project.basedir}/build/logs"/>
-  <delete dir="${project.basedir}/build/pdepend"/>
- </target>
+    <target name="logger.logs"
+      description="Aggregate the SFTP logs from the the app, db and redis containers" >
+      <lookup type="appserver" env="${logger.env}" uuid="${logger.uuid}"/>
+      <lookup type="dbserver" env="${logger.env}" uuid="${logger.uuid}"/>
+      <lookup type="redis" env="${logger.env}" uuid="${logger.uuid}"/>
+      <parallel threadCount="${logger.threads}">
+        <phingcall target="sftp.app" />
+        <phingcall target="sftp.db" />
+      </parallel>
+    </target>
 
- <target name="prepare" depends="clean" description="Prepare for build">
-  <mkdir dir="${project.basedir}/build/api"/>
-  <mkdir dir="${project.basedir}/build/code-browser"/>
-  <mkdir dir="${project.basedir}/build/coverage"/>
-  <mkdir dir="${project.basedir}/build/logs"/>
-  <mkdir dir="${project.basedir}/build/pdepend"/>
-  <mkdir dir="${project.basedir}/build/phpdox"/>
- </target>
-
- <target name="lint" description="Perform syntax check of sourcecode files">
-  <apply executable="php" checkreturn="1">
-   <arg value="-l" />
-
-   <fileset dir="${project.basedir}/src">
-    <include name="**/*.php" />
-   </fileset>
-
-   <fileset dir="${project.basedir}/tests">
-    <include name="**/*.php" />
-   </fileset>
-  </apply>
- </target>
-
- <target name="`phploc`" description="Measure project size using PHPLOC">
-  <exec executable="${project.basedir}/vendor/bin/phploc" logoutput="true">
-   <arg value="--log-csv" />
-   <arg value="${project.basedir}/build/logs/phploc.csv" />
-   <arg path="${project.basedir}/src" />
-  </exec>
- </target>
-
- <target name="pdepend" description="Calculate software metrics using PHP_Depend">
-  <exec executable="${project.basedir}/vendor/bin/pdepend" logoutput="true">
-   <arg value="--jdepend-xml=${project.basedir}/build/logs/jdepend.xml" />
-   <arg value="--jdepend-chart=${project.basedir}/build/pdepend/dependencies.svg" />
-   <arg value="--overview-pyramid=${project.basedir}/build/pdepend/overview-pyramid.svg" />
-   <arg path="${project.basedir}/src" />
-  </exec>
- </target>
-
- <target name="phpmd" description="Perform project mess detection using PHPMD and print human readable output. Intended for usage on the command line before committing.">
-  <exec executable="${project.basedir}/vendor/bin/phpmd" logoutput="true">
-   <arg path="${project.basedir}/src" />
-   <arg value="text" />
-   <arg value="${project.basedir}/phpmd.xml" />
-  </exec>
- </target>
-
- <target name="phpmd-ci" description="Perform project mess detection using PHPMD creating a log file for the continuous integration server">
-  <exec executable="${project.basedir}/vendor/bin/phpmd" logoutput="true">
-   <arg path="${project.basedir}/src" />
-   <arg value="xml" />
-   <arg value="${project.basedir}/phpmd.xml" />
-   <arg value="--reportfile" />
-   <arg value="${project.basedir}/build/logs/pmd.xml" />
-  </exec>
- </target>
-
- <target name="phpcs" description="Find coding standard violations using PHP_CodeSniffer and print human readable output. Intended for usage on the command line before committing.">
-  <exec executable="${project.basedir}/vendor/bin/phpcs" logoutput="true">
-   <arg value="--standard=${project.basedir}/phpcs.xml" />
-   <arg path="${project.basedir}/src" />
-  </exec>
- </target>
-
- <target name="phpcs-ci" description="Find coding standard violations using PHP_CodeSniffer creating a log file for the continuous integration server">
-  <exec executable="${project.basedir}/vendor/bin/phpcs" output="/dev/null">
-   <arg value="--report=checkstyle" />
-   <arg value="--report-file=${project.basedir}/build/logs/checkstyle.xml" />
-   <arg value="--standard=${project.basedir}/phpcs.xml" />
-   <arg path="${project.basedir}/src" />
-  </exec>
- </target>
-
- <target name="phpcpd" description="Find duplicate code using PHPCPD">
-  <exec executable="${project.basedir}/vendor/bin/phpcpd">
-   <arg value="--log-pmd" />
-   <arg value="${project.basedir}/build/logs/pmd-cpd.xml" />
-   <arg path="${project.basedir}/src" />
-  </exec>
- </target>
-
- <target name="phpdox" description="Generate API documentation using phpDox">
-  <exec executable="${project.basedir}/vendor/bin/phpdox"/>
- </target>
-
- <target name="phpunit" description="Run unit tests with PHPUnit">
-  <exec executable="${project.basedir}/vendor/bin/phpunit" logoutput="true" checkreturn="1"/>
- </target>
-
- <target name="phpcb" description="Aggregate tool output with PHP_CodeBrowser">
-  <exec executable="${project.basedir}/vendor/bin/phpcb">
-   <arg value="--log" />
-   <arg path="${project.basedir}/build/logs" />
-   <arg value="--source" />
-   <arg path="${project.basedir}/src" />
-   <arg value="--output" />
-   <arg path="${project.basedir}/build/code-browser" />
-  </exec>
- </target>
-
- <target name="install" description="Prepare files and directories for Jenkins">
- 	<mkdir dir="./build" />
- </target>
-
-</project>
+  </project>
