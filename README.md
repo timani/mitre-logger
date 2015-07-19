@@ -3,27 +3,6 @@
 This is an example of integrating a PHP application with the Jenkins PHP template (http://jenkins-php.org/). 
 Read more at http://systemsarchitect.net/continuous-integration-for-php-with-jenkins/
 
-Requirements
-------------
-
-This role requires Ansible 1.4 or higher and tested platforms are listed in the metadata file.  
-
- - **sftp**: The list a pools for php-fpm, each pools is a hash with
-   a name entry (used for filename), all the other entries in the hash are pool
-   directives (see http://php.net/manual/en/install.fpm.configuration.php).
- - **goaccess**: The list a pools for php-fpm, each pools is a hash with
-   a name entry (used for filename), all the other entries in the hash are pool
-   directives (see http://php.net/manual/en/install.fpm.configuration.php).
- - **percona-toolkit**: The list a pools for php-fpm, each pools is a hash with
-   a name entry (used for filename), all the other entries in the hash are pool
-   directives (see http://php.net/manual/en/install.fpm.configuration.php).
- - **docker** _(optional)_: The list a pools for php-fpm, each pools is a hash with
-   a name entry (used for filename), all the other entries in the hash are pool
-   directives (see http://php.net/manual/en/install.fpm.configuration.php).
- - **docker-compose** _(optional)_: The list a pools for php-fpm, each pools is a hash with
-   a name entry (used for filename), all the other entries in the hash are pool
-   directives (see http://php.net/manual/en/install.fpm.configuration.php).
-
 **Table of Contents**
 
 - [Introduction](#introduction)
@@ -47,6 +26,27 @@ This role requires Ansible 1.4 or higher and tested platforms are listed in the 
   * [`jQuery`](https://jquery.com/) via CDN, with a local fallback
   * A custom build of  [`Modernizr`](http://modernizr.com/) for feature
     detection
+
+Requirements
+------------
+
+This role requires Ansible 1.4 or higher and tested platforms are listed in the metadata file.  
+
+ - **sftp**: The list a pools for php-fpm, each pools is a hash with
+   a name entry (used for filename), all the other entries in the hash are pool
+   directives (see http://php.net/manual/en/install.fpm.configuration.php).
+ - **goaccess**: The list a pools for php-fpm, each pools is a hash with
+   a name entry (used for filename), all the other entries in the hash are pool
+   directives (see http://php.net/manual/en/install.fpm.configuration.php).
+ - **percona-toolkit**: The list a pools for php-fpm, each pools is a hash with
+   a name entry (used for filename), all the other entries in the hash are pool
+   directives (see http://php.net/manual/en/install.fpm.configuration.php).
+ - **docker** _(optional)_: The list a pools for php-fpm, each pools is a hash with
+   a name entry (used for filename), all the other entries in the hash are pool
+   directives (see http://php.net/manual/en/install.fpm.configuration.php).
+ - **docker-compose** _(optional)_: The list a pools for php-fpm, each pools is a hash with
+   a name entry (used for filename), all the other entries in the hash are pool
+   directives (see http://php.net/manual/en/install.fpm.configuration.php).
 
 ## Install
 
