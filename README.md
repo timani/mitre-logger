@@ -6,26 +6,36 @@ Read more at http://systemsarchitect.net/continuous-integration-for-php-with-jen
 Requirements
 ------------
 
-This role requires Ansible 1.4 or higher and tested platforms are listed in the metadata file.
-
-Role Variables
---------------
+This role requires Ansible 1.4 or higher and tested platforms are listed in the metadata file.  
 
 The role uses the following variables:
 
- - **php_fpm_pools**: The list a pools for php-fpm, each pools is a hash with
+ - **drush**: The list a pools for php-fpm, each pools is a hash with
    a name entry (used for filename), all the other entries in the hash are pool
    directives (see http://php.net/manual/en/install.fpm.configuration.php).
- - **php_fpm_pool_defaults**: A list of default directives used for all php-fpm pools
-   (see http://php.net/manual/en/install.fpm.configuration.php).
- - **php_fpm_apt_packages**: The list of packages to be installed by the
-  ```apt```, defaults to ```[php5-fpm]```.
-   module.
+ - **percona-toolkit**: The list a pools for php-fpm, each pools is a hash with
+   a name entry (used for filename), all the other entries in the hash are pool
+   directives (see http://php.net/manual/en/install.fpm.configuration.php).
+
+**Table of Contents**
+
+- [Introduction](#introduction)
+- [Features](#features)
+    - [Batteries Included](#batteries-included)
+    - [Nice UI](#nice-ui)
+    - [Excellent ergonomics](#excellent-ergonomics)
+    - [Convenient and Mnemonic Key Bindings](#convenient-and-mnemonic-key-bindings)
+        - [Great [Documentation][DOCUMENTATION.MD]](#great-documentationdocumentationmd)
+- [Prerequisites](#prerequisites)
+    - [Emacs version](#emacs-version)
+    - [OS X](#os-x)
 
 ## Install
 
 Want to run against the `master` branch? You'll need to include the dependent
 RSpec repos as well. Add the following to your `Gemfile`:
+
+### Install with Composer
 
 This project can be checked out with Composer.
 
@@ -34,12 +44,16 @@ This project can be checked out with Composer.
     "jorgegc/phing-drush": "*"
 }
 ```
+
 Install the dependencies with Composer
 ```
 php composer.phar install
 ```
 
-Run the install list command to see a list of available options
+
+## Usage
+
+Run the install list command to see a list of available targets
 ```
 ./vendor/bin/phing -l
 Default target:
