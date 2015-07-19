@@ -8,7 +8,6 @@ Requirements
 
 This role requires Ansible 1.4 or higher and tested platforms are listed in the metadata file.  
 
-The role uses the following variables:
 
  - **drush**: The list a pools for php-fpm, each pools is a hash with
    a name entry (used for filename), all the other entries in the hash are pool
@@ -30,6 +29,12 @@ The role uses the following variables:
     - [Emacs version](#emacs-version)
     - [OS X](#os-x)
 
+
+## How it works
+
+On every machine you install asciinema recorder, you get a new, unique API token. This command connects this local token with your asciinema.org account, and links all asciicasts recorded on this machine with the account.
+
+
 ## Install
 
 Want to run against the `master` branch? You'll need to include the dependent
@@ -50,6 +55,11 @@ Install the dependencies with Composer
 php composer.phar install
 ```
 
+## Overview
+
+On every machine you install asciinema recorder, you get a new, unique API token. This command connects this local token with your asciinema.org account, and links all asciicasts recorded on this machine with the account.
+
+[![demo](https://asciinema.org/a/624fjx2rx7k3pctdozw7m8b24.png)](https://asciinema.org/a/624fjx2rx7k3pctdozw7m8b24?autoplay=1)
 
 ## Usage
 
