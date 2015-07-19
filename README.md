@@ -29,12 +29,6 @@ This role requires Ansible 1.4 or higher and tested platforms are listed in the 
     - [Emacs version](#emacs-version)
     - [OS X](#os-x)
 
-
-## How it works
-
-On every machine you install asciinema recorder, you get a new, unique API token. This command connects this local token with your asciinema.org account, and links all asciicasts recorded on this machine with the account.
-
-
 ## Install
 
 Want to run against the `master` branch? You'll need to include the dependent
@@ -60,6 +54,12 @@ php composer.phar install
 On every machine you install asciinema recorder, you get a new, unique API token. This command connects this local token with your asciinema.org account, and links all asciicasts recorded on this machine with the account.
 
 [![demo](https://asciinema.org/a/624fjx2rx7k3pctdozw7m8b24.png)](https://asciinema.org/a/624fjx2rx7k3pctdozw7m8b24?autoplay=1)
+
+## How it works
+
+On every machine you install asciinema recorder, you get a new, unique API token. This command connects this local token with your asciinema.org account, and links all asciicasts recorded on this machine with the account.
+
+[![demo](http://www.scielo.br/img/revistas/jistm/v8n1/a05fig02.jpg)] 
 
 ## Usage
 
