@@ -1,71 +1,67 @@
 # Mitre Logger [![Build Status](https://secure.travis-ci.org/rspec/rspec-expectations.svg?branch=master)](http://travis-ci.org/rspec/rspec-expectations) [![Code Climate](https://codeclimate.com/github/rspec/rspec-expectations.svg)](https://codeclimate.com/github/rspec/rspec-expectations)
 
-This is an example of integrating a PHP application with the Jenkins PHP template (http://jenkins-php.org/). 
-Read more at http://systemsarchitect.net/continuous-integration-for-php-with-jenkins/
+A general purpose logging tool to get and analyze logs from Drupal and WordPress sites on Pantheon. Very unstable!
 
 **Table of Contents**
 
-- [Introduction](#introduction)
+- [Overview](#Overview)
 - [Features](#features)
-    - [Batteries Included](#batteries-included)
-    - [Nice UI](#nice-ui)
+- [Requirements](#requirements)
+- [Install](#install)
     - [Excellent ergonomics](#excellent-ergonomics)
-    - [Convenient and Mnemonic Key Bindings](#convenient-and-mnemonic-key-bindings)
-        - [Great [Documentation][DOCUMENTATION.MD]](#great-documentationdocumentationmd)
-- [Prerequisites](#prerequisites)
-    - [Emacs version](#emacs-version)
-    - [OS X](#os-x)
+    - [Convenient and Mnemonic Key Bindings](#convenient-and-mnemonic-key-bindings) 
+- [Configuration](#configuration)
+    - [Emacs version](#emacs-version) 
+
+## Overview
+
+On every machine you install asciinema recorder, you get a new, unique API token. This command connects this local token with your asciinema.org account, and links all asciicasts recorded on this machine with the account.
+
+[![demo](https://asciinema.org/a/624fjx2rx7k3pctdozw7m8b24.png)](https://asciinema.org/a/624fjx2rx7k3pctdozw7m8b24?autoplay=1)
 
 ## Features
 
-* HTML5 ready. Use the new elements with confidence.
-* Designed with progressive enhancement in mind.
-* Includes:
-  * [`Normalize.css`](https://necolas.github.com/normalize.css/)
-    for CSS normalizations and common bug fixes
-  * [`jQuery`](https://jquery.com/) via CDN, with a local fallback
-  * A custom build of  [`Modernizr`](http://modernizr.com/) for feature
-    detection
+* Pantheon CLI support
+  * Drush
+  * wp-cli
+* Download SFTP on multiple containers
+* Percona toolkit MySQL query digest
+* Generate log reports 
+* Jenkins integration
+* Docker Support
+* Vagrant Support
 
 Requirements
 ------------
 
 This role requires Ansible 1.4 or higher and tested platforms are listed in the metadata file.  
 
- - **sftp**: The list a pools for php-fpm, each pools is a hash with
-   a name entry (used for filename), all the other entries in the hash are pool
-   directives (see http://php.net/manual/en/install.fpm.configuration.php).
- - **goaccess**: The list a pools for php-fpm, each pools is a hash with
-   a name entry (used for filename), all the other entries in the hash are pool
-   directives (see http://php.net/manual/en/install.fpm.configuration.php).
- - **percona-toolkit**: The list a pools for php-fpm, each pools is a hash with
-   a name entry (used for filename), all the other entries in the hash are pool
-   directives (see http://php.net/manual/en/install.fpm.configuration.php).
- - **docker** _(optional)_: The list a pools for php-fpm, each pools is a hash with
-   a name entry (used for filename), all the other entries in the hash are pool
-   directives (see http://php.net/manual/en/install.fpm.configuration.php).
- - **docker-compose** _(optional)_: The list a pools for php-fpm, each pools is a hash with
-   a name entry (used for filename), all the other entries in the hash are pool
-   directives (see http://php.net/manual/en/install.fpm.configuration.php).
+ - **sftp**: Standard SFTP CLI access is required to use the Logger and the program will need to be installed.
+ - **goaccess**: In order to perform nginx access log analysis with goaccess locally the logger will require
+    the program to be installed.
+ - **percona-toolkit**: In order to use the Percona toolkit MySQL query digest without Docker or Vagrant
+   will require the Percona Toolkit to be installed.
+ - **docker** _(optional)_: The basic Docker installation will include all of the requirements to 
+   install and run the Logger.
+ - **docker-compose** _(optional)_: The more adavanced Docker installation which includes Jenkins that provides
+   a UI to run and manage jobs.
 
 ## Install
 
 Want to run against the `master` branch? You'll need to include the dependent
 RSpec repos as well. Add the following to your `Gemfile`:
 
-### Install with Composer
+###  Install with Composer
 
-This project can be checked out with Composer.
+Clone the repository from github.
 
-```
-"require": {
-    "jorgegc/phing-drush": "*"
-}
+```bash
+git clone https://github.com/timani/mitre-logger.git
 ```
 
 Install the dependencies with Composer
 ```
-php composer.phar install
+composer install
 ```
 ### Install with Docker
  
@@ -97,45 +93,30 @@ Verify the container is running
 docker-compose ps
 ```
 
-
-## Overview
-
-On every machine you install asciinema recorder, you get a new, unique API token. This command connects this local token with your asciinema.org account, and links all asciicasts recorded on this machine with the account.
-
-[![demo](https://asciinema.org/a/624fjx2rx7k3pctdozw7m8b24.png)](https://asciinema.org/a/624fjx2rx7k3pctdozw7m8b24?autoplay=1)
-
-## How it works
-
-On every machine you install asciinema recorder, you get a new, unique API token. This command connects this local token with your asciinema.org account, and links all asciicasts recorded on this machine with the account.
-
-[![demo](http://www.scielo.br/img/revistas/jistm/v8n1/a05fig02.jpg)] 
-
 ## Configuration
 
 On every machine you install asciinema recorder, you get a new, unique API token. This command connects this local token with your asciinema.org account, and links all asciicasts recorded on this machine with the account.
 
-#### Logger Properties
+#### Required Properties
 
-The last line of the example expresses an expected outcome.
-
-```xml 
-  <property name="logger.uuid" value="9f605e3b-aa07-4302-8683-8dbbff6dd33f" />
-  <property name="logger.env" value="dev" />
-  <property name="logger.threads" value="2" />
-  <property name="logger.reports.dir" value="${project.basedir}/build/reports"/>
-```
-
-#### Drush Properties
-
-Those PRs are fast-forwarded whenever it's possible and cherry-picked otherwise (most likely they will be cherry-picked).
+The following configuration properties must be set in the `build.properties.xml` file. 
 
 ```xml 
-  <property name="drush.target" value="@monolog-new-relic-d7.dev" />
-  <property name="drush.bin"  value="${project.basedir}/vendor/bin/drush" />
+  <property name="logger.uuid" value="" />
+  <!-- ## dev/test/live/<multidev> - Lowercase -->
+  <property name="logger.env" value="" />
+  <!-- ## <site-name> - Lowercase, Machine name -->
+  <property name="logger.name" value="" />
+  <!-- ## Terminus auth --> 
+  <property name="terminus.session"  value="" />
+  <!--  &&&&&&  OR  &&&&&& -->
+  <property name="logger.user.email" value="" />
+  <property name="logger.user.password" value="" />
 ```
+
 #### Misc Properties
 
-You'll need to include the dependent RSpec repos as well. 
+Miscelaneous configuration properties. 
 
 ```xml 
   <property name="dash.url" value="https://admin.dashboard.pantheon.io" />
@@ -150,28 +131,52 @@ Run the install list command to see a list of available targets
 ./vendor/bin/phing -l
 Default target:
 -------------------------------------------------------------------------------
- logger.collect-logs  Collect all the service and server logs for a site
+ logger.collect-logs      Collect all the service and server logs for a site
 
 Main targets:
 -------------------------------------------------------------------------------
- base.build           Base build to clean and install the logger
- base.clean           Clean the cache and artificats
- base.install         Install dependencies and create directories
- db.kill-queries      Kill long running queries @TODO
- db.processlist       Show the full MySQL processlist.
- db.pt-query-digest   Analyze MySQL slow logs with the pt-query-digest
- db.status            Show InnoDB engine status
- logger.analyze       Analyze and generate a report for the build
- logger.app           Aggregate the logs from the application containers
- logger.collect-logs  Collect all the service and server logs for a site
- logger.db            Aggregate the logs from the database containers
- logger.logs          Aggregate the SFTP logs from the the app, db and redis containers
- logger.redis         Aggregate the logs from the redis containers
- sftp.app             Collect the latest logs from the application containers
- sftp.db              Collect the latest logs from the database containers
- sftp.redis           Collect the latest logs from the redis containers
- wd.clear             Clear the watchdog table of all entries
- wd.show              Show the latest watchdog errors
+ base.auth                Authenticate with external services
+ base.build               Base build to clean and install the logger
+ base.clean               Clean the cache and artificats
+ base.install             Install dependencies and create directories
+ logger.collect-logs      Collect all the service and server logs for a site
+ logger.db.kill-queries   Kill long running queries @TODO
+ logger.db.processlist    Show InnoDB engine status
+ logger.db.status         Show the full MySQL processlist.
+ logger.drupal.wd.clear   Clear the watchdog table of all entries
+ logger.drupal.wd.show    Show the latest watchdog errors
+ logger.service.app       Aggregate the logs from the application containers
+ logger.service.db        Aggregate the logs from the database containers
+ logger.service.logs      Aggregate the service logs from the the app, db and redis containers
+ logger.service.redis     Aggregate the logs from the redis containers
+ logger.sftp.app          Collect the latest logs from the application containers
+ logger.sftp.db           Collect the latest logs from the database containers
+ logger.sftp.logs         Aggregate the SFTP logs from the the app, db and redis containers
+ logger.sftp.redis        Collect the latest logs from the redis containers
+ mitre_base.base.auth     Authenticate with external services
+ mitre_base.base.build    Base build to clean and install the logger
+ mitre_base.base.clean    Clean the cache and artificats
+ mitre_base.base.install  Install dependencies and create directories
+ report.analyze           Analyze all service and server logs
+ report.mysql.slow        Analyze MySQL slow logs with the pt-query-digest
+ report.mysql.status      Analyze MySQL engine status
+ report.mysql.summary     Generate summary of MySQL reports
+ report.nginx.access      Analyze Nginx access
+ report.nginx.error       Analyze Nginx errors
+ report.nginx.summary     Generate summary of Nginx reports
+ report.php.error         Analyze PHP error log
+ report.php.fpm-error     Analyze PHP-FPM error log
+ report.php.slow          Analyze PHP slow log
+ report.php.summary       Generate summary of PHP reports
+ report.summary           Generate summary of all service and server logs
+ terminus.auth            Authenticate user on Pantheon
+ terminus.talk            General debugging
+ terminus.wake            Wake a reaped environment
+
+Subtargets:
+-------------------------------------------------------------------------------
+ cctarget
+ ctarget
 ```
 
 ## Support
